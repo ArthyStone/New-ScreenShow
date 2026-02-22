@@ -14,7 +14,7 @@ $router = new Router();
 |--------------------------------------------------------------------------
 */
 $router->get('/login', [AuthController::class, 'redirectToTwitch']);
-$router->get('/auth/twitch', [AuthController::class, 'handleTwitchCallback']);
+$router->get('/auth/twitch/callback', [AuthController::class, 'handleTwitchCallback']);
 $router->get('/logout', [AuthController::class, 'logout'], [
     'middleware' => 'auth'
 ]);

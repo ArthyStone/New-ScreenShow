@@ -33,7 +33,8 @@ class AuthController
             'redirect_uri' => $redirectUri,
             'response_type' => 'code',
             'scope' => '',
-            'state' => $state
+            'state' => $state,
+            'force_verify' => 'true' // Toujours demander à l'utilisateur de se reconnecter, pour éviter des boucles de connexion et surtout pour permettre de changer de compte facilement
         ]);
 
         header("Location: $url");
@@ -76,11 +77,10 @@ class AuthController
         if (!$user) {
             $user = $this->userModel->createFromTwitch($userData);
         }
+        Session::set('user_id', (string) $user['twitchId']);
+        Session::set('permissions', $user['perms'] ?? []);
 
-        Session::set('user_id', (string) $user['id']);
-        Session::set('permissions', $user['permissions'] ?? []);
-
-        header('Location: /dashboard');
+        header('Location: /infos');
         exit;
     }
 

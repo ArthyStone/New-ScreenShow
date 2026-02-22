@@ -46,10 +46,10 @@ class UserModel {
             "username" => $data['display_name'],
             "twitchId" => $data['id'],
             "twitchPP" => $data['profile_image_url'],
+            "comments" => "Aucun commentaire pour le moment",
             "tickets" => 0,
             "spent_tickets" => 0,
             "perms" => ["uploadImages", "addToWaitingList"],
-            "comments" => "Aucun commentaire pour le moment",
         ];
 
         $result = $this->collection->insertOne($user);
