@@ -1,0 +1,1 @@
+<input type="hidden" name="csrf_token" value="<?= \App\Core\Csrf::generateToken(); ?>">
