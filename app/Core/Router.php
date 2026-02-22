@@ -43,9 +43,11 @@ class Router {
             ) {
                 $this->runMiddleware($route['options']);
 
-                [$controller, $method] = $route['action'];
-
-                (new $controller())->$method();
+                //[$controller, $method, $params] = $route['action'];
+                $controller = $route['action'][0];
+                $method = $route['action'][1];
+                $params = $route['action'][2] ?? [];
+                (new $controller())->$method(...$params);
                 return;
             }
         }
