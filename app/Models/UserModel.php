@@ -45,7 +45,7 @@ class UserModel {
         $user = [
             "username" => $data['display_name'],
             "twitchId" => $data['id'],
-            "twitchPP" => $data['profile_image_url'],
+            "twitchPFP" => $data['profile_image_url'],
             "comments" => "Aucun commentaire pour le moment",
             "tickets" => 0,
             "spent_tickets" => 0,
@@ -62,7 +62,7 @@ class UserModel {
         $this->collection->insertOne([
             "username" => $username,
             "twitchId" => $twitchId,
-            "twitchPP" => $twitchPP,
+            "twitchPFP" => $twitchPP,
             "tickets" => 0,
             "spent_tickets" => 0,
             "perms" => ["uploadImages", "addToWaitingList"],
