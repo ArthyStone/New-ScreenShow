@@ -1,0 +1,140 @@
+
+* { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0.3s ease; outline: none; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+i {
+    display: block;
+    padding-top: 3px; /* Obligé de centrer ::before à la main */
+    width: 24px;
+    height: 24px;
+    color: #fff;
+    overflow: hidden;
+    font-size: 18px;
+    min-width: 24px;
+    text-align: center
+}
+
+/*
+    --------------------------------------------------------------------------------------------------
+   ---------------------------------------------- HEADER ----------------------------------------------
+    --------------------------------------------------------------------------------------------------
+*/
+header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+    width: 100vw;
+    background-color: #996FE2;
+    color: #fff;
+    gap : 10px;
+    padding: 20px;
+    transition: none;
+}
+.toggle-sidebar {
+    display: none;
+    width: 38px;
+    height: 38px;
+    background: #996FE2;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+}
+.user-details {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #fff;
+    color: #996FE2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+span.tickets {
+    display: inline-flex;
+    align-items: center;
+    justify-content: end;
+    gap: 2px;
+}
+span.tickets i {
+    font-size: 16px;
+}
+
+/*
+    -------------------------------------------------------------------------------------------------
+   --------------------------------------------- SIDEBAR ---------------------------------------------
+    -------------------------------------------------------------------------------------------------
+*/
+aside {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 80px);
+    background-color: #AB86ED;
+    color: #fff;
+    padding: 10px;
+}
+aside > a { /* Boutons de navigation */
+    display: flex;
+    width: 200px;
+    font-size: 16px;
+    background-color: #8763C8;
+    color: #fff;
+    cursor: pointer;
+    gap: 10px;
+    /* padding: 8px; */
+    border: 8px solid transparent;
+    border-radius: 8px;
+    text-decoration: none;
+    overflow: hidden; /* Empêche le texte de dépasser et surtout le fait disparaître à la réduction de la sidebar */
+}
+aside > a:hover {
+    background-color: #8663c888;
+}
+main {
+    margin-left: 220px; /* largeur de la sidebar */
+    min-height: calc(100vh - 80px); /* prend toute la hauteur disponible sous le header */
+}
+
+/*
+    --------------------------------------------------------------------------------------------------
+   -------------------------------------------- RESPONSIVE --------------------------------------------
+    --------------------------------------------------------------------------------------------------
+*/
+/* Petit navigateur */
+@media (max-width: 1000px) {
+    aside > a {
+        width: 40px;
+    }
+    aside { width: 60px; }
+    main { margin-left: 60px; }
+}
+/* Mobile */
+@media (max-width: 768px) {
+    .toggle-sidebar { display: flex; }
+    aside {
+        width: 100%;
+    }
+}
