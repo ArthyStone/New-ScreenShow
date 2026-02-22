@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\Core\Router;
 use App\Controllers\AuthController;
+use App\Controllers\PageController;
 // use App\Controllers\UploadController;
 // use App\Controllers\AdminController;
 
@@ -16,6 +17,11 @@ $router = new Router();
 $router->get('/login', [AuthController::class, 'redirectToTwitch']);
 $router->get('/auth/twitch/callback', [AuthController::class, 'handleTwitchCallback']);
 $router->get('/logout', [AuthController::class, 'logout'], [
+    'middleware' => 'auth'
+]);
+
+$router->get('/infos', [PageController::class, 'show', ['Infos']]);
+$router->get('/images', [PageController::class, 'show', ['Images']], [
     'middleware' => 'auth'
 ]);
 
