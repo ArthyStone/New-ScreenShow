@@ -77,7 +77,10 @@ class AuthController
         if (!$user) {
             $user = $this->userModel->createFromTwitch($userData);
         }
-        Session::set('user_id', (string) $user['twitchId']);
+        Session::set('user_id', (string) $user['twitchId'] ?? '0');
+        Session::set('user_name', (string) $user['username'] ?? 'Utilisateur');
+        Session::set('user_pfp', (string) $user['twitchPFP'] ?? 'https://i.pinimg.com/170x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg');
+        Session::set('user_tickets', (string) $user['tickets'] ?? 0);
         Session::set('permissions', $user['perms'] ?? []);
 
         header('Location: /infos');
