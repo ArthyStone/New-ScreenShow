@@ -6,12 +6,10 @@ namespace App\Controllers;
 use App\Core\Session;
 use App\Models\UserModel;
 
-class AuthController
-{
+class AuthController {
     private UserModel $userModel;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->userModel = new UserModel();
     }
 
@@ -20,8 +18,8 @@ class AuthController
     | Redirection vers Twitch
     |--------------------------------------------------------------------------
     */
-    public function redirectToTwitch(): void
-    {
+    public function redirectToTwitch(): void {
+        $redirect = $_GET['redirect'] ?? "/infos";
         $clientId = $_ENV['TWITCH_CLIENT_ID'];
         $redirectUri = $_ENV['TWITCH_REDIRECT_URI'];
 
@@ -36,6 +34,7 @@ class AuthController
             'state' => $state,
             'force_verify' => 'true' // Toujours demander à l'utilisateur de se reconnecter, pour éviter des boucles de connexion et surtout pour permettre de changer de compte facilement
         ]);
+        Session::set('redirect', $redirect); // Stocker la redirection dans la session pour l'utiliser après le callback
 
         header("Location: $url");
         exit;
@@ -46,8 +45,9 @@ class AuthController
     | Callback Twitch
     |--------------------------------------------------------------------------
     */
-    public function handleTwitchCallback(): void
-    {
+    public function handleTwitchCallback(): void {
+        $redirect = Session::get('redirect') ?? "/infos";
+        Session::remove('redirect');
         $code = $_GET['code'] ?? null;
         $state = $_GET['state'] ?? null;
 
@@ -83,7 +83,7 @@ class AuthController
         Session::set('user_tickets', (string) $user['tickets'] ?? 0);
         Session::set('permissions', $user['perms'] ?? []);
 
-        header('Location: /infos');
+        header('Location: ' . $redirect);
         exit;
     }
 
@@ -94,7 +94,7 @@ class AuthController
     */
     public function logout(): void {
         Session::destroy();
-        header('Location: /login');
+        header('Location: /infos');
         exit;
     }
 
@@ -122,8 +122,7 @@ class AuthController
         return $response ? json_decode($response, true) : null;
     }
 
-    private function getTwitchUser(string $accessToken): ?array
-    {
+    private function getTwitchUser(string $accessToken): ?array {
         $response = file_get_contents('https://api.twitch.tv/helix/users', false, stream_context_create([
             'http' => [
                 'method' => 'GET',
