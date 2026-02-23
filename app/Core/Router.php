@@ -41,7 +41,7 @@ class Router {
                 $route['uri'] === $requestUri &&
                 $route['method'] === $requestMethod
             ) {
-                $this->runMiddleware($route['options']);
+                $this->runMiddleware($route['options'], $route['uri']);
 
                 //[$controller, $method, $params] = $route['action'];
                 $controller = $route['action'][0];
@@ -56,7 +56,7 @@ class Router {
         echo "Page non trouvée.";
     }
 
-    private function runMiddleware(array $options): void {
+    private function runMiddleware(array $options, string $uri): void {
         if (!isset($options['middleware'])) {
             return;
         }
@@ -65,11 +65,11 @@ class Router {
 
         if (str_starts_with($middleware, 'permission:')) {
             $permission = explode(':', $middleware)[1];
-            \App\Middlewares\PermissionMiddleware::handle($permission);
+            \App\Middlewares\PermissionMiddleware::handle($permission, $uri);
         }
 
         if ($middleware === 'auth') {
-            \App\Middlewares\AuthMiddleware::handle();
+            \App\Middlewares\AuthMiddleware::handle($uri);
         }
     }
 }
