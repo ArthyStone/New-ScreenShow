@@ -1,20 +1,72 @@
 
-* { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0.3s ease; outline: none; }
+* { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0.3s ease, background-color 0s, color 0s; outline: none; }
+:root {
+    --primary-color: #996FE2;
+    --primary-hover-color: #996FE288;
+    --secondary-color: #AB86ED;
+    --secondary-hover-color: #AB86ED88;
+    --tertiary-color: #8763C8;
+    --tertiary-hover-color: #8763C888;
+    --quaternary-color: #6B4FA0;
+    --quaternary-hover-color: #6b4fa0c4;
+    --text-color: #000;
+    --layout-text-color: #fff;
+    --background-color: #f4f4f4;
+    --disconnect-color: #eca8a8;
+    --connect-color: #d9f7e0;
+    --theme-toggle-color: var(--quaternary-color);
+    --theme-toggle-hover-color: var(--quaternary-hover-color);
+}
+body.dark {
+    --primary-color: #7a5bbf;
+    --primary-hover-color: #7a5bbf88;
+    --secondary-color: #6b4fad;
+    --secondary-hover-color: #6b4fad88;
+    --tertiary-color: #5c4096;
+    --tertiary-hover-color: #5c409688;
+    --quaternary-color: #4e3380;
+    --quaternary-hover-color: #4e338088;
+    --text-color: #e8e0f5;        /* blanc légèrement teinté violet */
+    --layout-text-color: #f0eaff;
+    --background-color: linear-gradient(135deg, #1a1625, #2d1f4a);
+    --disconnect-color: #ff6464;
+    --connect-color: #a4ffba;
+    --theme-toggle-color: var(--primary-color);
+    --theme-toggle-hover-color: var(--primary-hover-color);
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background: var(--background-color);
+    overflow: hidden; /* empêche le scroll global */
 }
-i {
+header i,
+aside i {
     display: block;
     padding-top: 3px; /* Obligé de centrer ::before à la main */
     width: 24px;
     height: 24px;
-    color: #fff;
+    color: var(--layout-text-color);
     overflow: hidden;
     font-size: 18px;
     min-width: 24px;
-    text-align: center
+    text-align: center;
+}
+#theme-toggle {
+    cursor: pointer;
+}
+.toggle-sidebar i {
+    font-size: 25px;
+    width: 30px;
+    height: 30px;
+    color: var(--layout-text-color);
+}
+.fa-right-from-bracket {
+    color: var(--disconnect-color);
+}
+.fa-right-to-bracket {
+    color: var(--connect-color);
 }
 
 /*
@@ -23,25 +75,33 @@ i {
     --------------------------------------------------------------------------------------------------
 */
 header {
+    position: fixed;
+    top: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     height: 80px;
     width: 100vw;
-    background-color: #996FE2;
-    color: #fff;
+    background-color: var(--primary-color);
+    color: var(--layout-text-color);
     gap : 10px;
     padding: 20px;
-    transition: none;
+    transition: all 0.3s ease, width 0s;
+}
+header > span { /* ensemble titre + toggle navbar */
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 }
 .toggle-sidebar {
     display: none;
     width: 38px;
     height: 38px;
-    background: #996FE2;
+    background: var(--quaternary-color);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -61,8 +121,8 @@ header {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #fff;
-    color: #996FE2;
+    background: var(--background-color);
+    color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,36 +146,57 @@ span.tickets i {
 aside {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
     position: fixed;
     top: 80px;
     left: 0;
     width: 220px;
     height: calc(100vh - 80px);
-    background-color: #AB86ED;
-    color: #fff;
+    background-color: var(--secondary-color);
+    color: var(--layout-text-color);
     padding: 10px;
 }
-aside > a { /* Boutons de navigation */
+aside div {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+aside button,
+aside a { /* Boutons de navigation */
+    display: flex;
+    align-items: center;
     width: 200px;
     font-size: 16px;
-    background-color: #8763C8;
-    color: #fff;
+    background-color: var(--tertiary-color);
+    color: var(--layout-text-color);
     cursor: pointer;
     gap: 10px;
     /* padding: 8px; */
     border: 8px solid transparent;
     border-radius: 8px;
     text-decoration: none;
+    text-wrap: nowrap; /* Empêche le texte de se mettre sur plusieurs lignes */
     overflow: hidden; /* Empêche le texte de dépasser et surtout le fait disparaître à la réduction de la sidebar */
 }
-aside > a:hover {
-    background-color: #8663c888;
+aside a:hover {
+    background-color: var(--tertiary-hover-color);
 }
+aside button {
+    background-color: var(--theme-toggle-color);
+}
+aside button:hover {
+    background-color: var(--theme-toggle-hover-color);
+}
+aside a > i { /* boutons de nav */
+    opacity: 100%;
+}
+
 main {
+    color: var(--text-color);
     margin-left: 220px; /* largeur de la sidebar */
-    min-height: calc(100vh - 80px); /* prend toute la hauteur disponible sous le header */
+    margin-top: 80px; /* hauteur du header */
+    height: calc(100vh - 80px); /* prend toute la hauteur disponible sous le header */
+    overflow-y: auto; /* la scrollbar appartient à main */
 }
 
 /*
@@ -125,7 +206,8 @@ main {
 */
 /* Petit navigateur */
 @media (max-width: 1000px) {
-    aside > a {
+    aside button,
+    aside a {
         width: 40px;
     }
     aside { width: 60px; }
@@ -133,8 +215,45 @@ main {
 }
 /* Mobile */
 @media (max-width: 768px) {
+    header {
+        height: 50px;
+        padding: 5px;
+    }
     .toggle-sidebar { display: flex; }
     aside {
+        top: 50px;
         width: 100%;
+        height: calc(100vh - 50px);
+        padding: 10px 20px;
+    }
+    .disabled {
+        width: 0;
+        padding: 0;
+    }
+    aside button,
+    aside a { /* boutons de nav */
+        width: 100%;
+        font-size: 25px;
+    }
+    .disabled button,
+    .disabled a { /* boutons de nav */
+        width: 0;
+        border: 0px solid transparent;
+    }
+    aside button > i,
+    aside a > i {
+        padding-top: 8px; /* Obligé de centrer ::before à la main */
+        font-size: 25px;
+        height: 40px;
+        width: 40px;
+    }
+    .disabled button > i,
+    .disabled a > i { /* boutons de nav */
+        opacity: 0;
+    }
+    main {
+        margin: 0;
+        margin-top: 50px;
+        height: calc(100vh - 50px);
     }
 }
