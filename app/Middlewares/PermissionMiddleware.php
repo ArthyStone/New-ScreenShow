@@ -7,18 +7,14 @@ use App\Core\Session;
 use App\Models\UserModel;
 
 class PermissionMiddleware {
-    public static function handle(string $permission): void{
-        if (!Session::has('user')) {
-            header('Location: /login');
+    public static function handle(string $permission, string $redirectUri): void{
+        if (!Session::has('user_id')) {
+            header('Location: /login?redirect=' . urlencode($redirectUri));
             exit;
         }
-
-        $userData = Session::get('user');
-
+        $twitchId = Session::get('user_id');
         $userModel = new UserModel();
-        $userModel->setUser($userData);
-
-        if (!$userModel->hasPermission($permission)) {
+        if (!$userModel->hasPermissionByTwitchId($twitchId, $permission)) {
             http_response_code(403);
             echo "Accès interdit.";
             exit;
