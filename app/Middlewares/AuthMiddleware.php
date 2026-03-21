@@ -5,12 +5,10 @@ namespace App\Middlewares;
 
 use App\Core\Session;
 
-class AuthMiddleware
-{
-    public static function handle(): void
-    {
+class AuthMiddleware {
+    public static function handle(string $redirectUri): void {
         if (!Session::has('user_id')) {
-            header('Location: /login');
+            header('Location: /login?redirect=' . urlencode($redirectUri));
             exit;
         }
     }

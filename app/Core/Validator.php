@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-class Validator
-{
+class Validator {
     private array $errors = [];
 
-    public function validate(array $data, array $rules): bool
-    {
+    public function validate(array $data, array $rules): bool {
         foreach ($rules as $field => $ruleList) {
 
             $value = trim($data[$field] ?? '');
@@ -38,8 +36,7 @@ class Validator
         return empty($this->errors);
     }
 
-    public function errors(): array
-    {
+    public function errors(): array {
         return $this->errors;
     }
 }

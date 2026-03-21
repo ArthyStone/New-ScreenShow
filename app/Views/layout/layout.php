@@ -5,7 +5,7 @@
     <title><?= $title ?? "ScreenShow" ?></title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link rel="stylesheet" type="text/css" href="/css/<?= lcfirst($title) ?>.css">
-    <link rel="icon" href="https://www.pierreshow.fr/img/logo.png" type="image/png">
+    <link rel="icon" href="/resources/icon.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -37,7 +37,7 @@
                 <i class="fa-solid fa-image<?= $title === "Images" ? " fa-fade" : ""?>"></i>
                 <span class="label">Images</span>
             </a>
-            <a href="">
+            <a href="/display">
                 <i class="icon fa-solid fa-tower-broadcast"></i> <!-- Pas besoin de fade car c'est une page qui ne sera pas affichée via ce layout -->
                 <span class="label">Direct</span>
             </a>

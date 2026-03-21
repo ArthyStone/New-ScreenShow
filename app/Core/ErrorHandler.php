@@ -11,7 +11,7 @@ class ErrorHandler {
 
     public static function handleException(\Throwable $e): void {
         http_response_code(500);
-        echo "Erreur interne du serveur.";
+        echo "Erreur interne.";
         echo "<pre>";
         echo $e;
         exit;

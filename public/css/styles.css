@@ -1,5 +1,9 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0.3s ease, background-color 0s, color 0s; outline: none; }
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
 :root {
     --primary-color: #996FE2;
     --primary-hover-color: #996FE288;
@@ -11,7 +15,7 @@
     --quaternary-hover-color: #6b4fa0c4;
     --text-color: #000;
     --layout-text-color: #fff;
-    --background-color: #f4f4f4;
+    --background-color: #F4E8FF;
     --disconnect-color: #eca8a8;
     --connect-color: #d9f7e0;
     --theme-toggle-color: var(--quaternary-color);
@@ -37,9 +41,11 @@ body.dark {
 
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family:'Poppins', sans-serif;
     background: var(--background-color);
     overflow: hidden; /* empêche le scroll global */
+    scrollbar-width: none;      /* Firefox */
+    -ms-overflow-style: none;   /* Internet Explorer 10+ */
 }
 header i,
 aside i {
@@ -191,12 +197,41 @@ aside a > i { /* boutons de nav */
     opacity: 100%;
 }
 
+/*
+    -------------------------------------------------------------------------------------------------
+   ---------------------------------------------- AUTRE ----------------------------------------------
+    -------------------------------------------------------------------------------------------------
+*/
 main {
     color: var(--text-color);
     margin-left: 220px; /* largeur de la sidebar */
     margin-top: 80px; /* hauteur du header */
     height: calc(100vh - 80px); /* prend toute la hauteur disponible sous le header */
     overflow-y: auto; /* la scrollbar appartient à main */
+}
+
+.unAuthorized {
+    padding: 8px;
+    position: relative;
+    opacity: 0.55;
+    filter: grayscale(1);
+    pointer-events: none;
+    background: repeating-linear-gradient(
+    45deg,
+    #bbb 0px,
+    #bbb 12px,
+    #e0e0e0 12px,
+    #e0e0e0 24px
+    );
+    border-radius: 12px;
+    border: 4px solid #777777ff;
+    min-height: 48px;
+}
+
+.unAuthorized button,
+.unAuthorized input[type="text"] {
+    pointer-events: none;
+    opacity: 0.7;
 }
 
 /*
