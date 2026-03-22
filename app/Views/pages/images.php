@@ -236,7 +236,7 @@ function openOverlay(id) {
             class="overlay-media"
             ${media.type === "image" ? ">" : "></video>"}
         </div>
-        <div class="mediaPriority" onclick="event.stopPropagation()">
+        <div class="mediaPriority" onclick="event.stopPropagation()" title="Attention, la priorité triple le coût en tickets">
             <p>Priorité:</p>
             <label class="switch">
                 <input type="checkbox" onclick="togglePriority(this)" ${prioritized ? "checked" : ""}>
@@ -272,6 +272,7 @@ let selectValue = localStorage.getItem('timeSelect') ?? 30;
 let prioritized = false;
 function togglePriority(checkbox) {
     prioritized = checkbox.checked;
+    document.querySelector('.add-btn').classList.toggle('prio');
     document.querySelector('.ticketCost #innerTicketCost p').innerHTML = `coût: ${prioritized ? selectValue * 3 : selectValue} <i class="fa-solid fa-ticket"></i>`;
 }
 function selectDuration(e) {
