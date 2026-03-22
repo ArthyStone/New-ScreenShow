@@ -6,6 +6,10 @@
     --direct-state-background: #f76f6f;
     --username-color: #777777;
     --title-color: black;
+    --second-items-tag-color: #b4a4da;
+    --third-items-tag-color: #8d7bb8;
+    --fourth-items-tag-color: #6d5a99;
+    --other-items-tag-color: #554183;
 }
 body.dark {
     --item-background: #423468;
@@ -14,6 +18,10 @@ body.dark {
     --direct-state-background: #f33232;
     --username-color: #d2bce4;
     --title-color: white;
+    --second-items-tag-color: #9c88bd;
+    --third-items-tag-color: #9d79d8;
+    --fourth-items-tag-color: #9c66f1;
+    --other-items-tag-color: #8a4cee;
 }
 
 .list {
@@ -78,8 +86,17 @@ body.dark {
 .state.direct {
     background-color: var(--direct-state-background);
 }
-.state.waiting {
-    background-color: #F7B84E;
+.list .state.waiting {
+    background-color: var(--other-items-tag-color);
+}
+.list .item:nth-child(2) .state {
+    background-color: var(--second-items-tag-color);
+}
+.list .item:nth-child(3) .state {
+    background-color: var(--third-items-tag-color);
+}
+.list .item:nth-child(4) .state {
+    background-color: var(--fourth-items-tag-color);
 }
 .visual-info .user-info {
     display: flex;

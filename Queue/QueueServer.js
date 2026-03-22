@@ -1,7 +1,15 @@
 const WebSocket = require("ws");
 const { createClient } = require("redis");
 const http = require("http");
-
+const placeholder = {
+    id: "0",
+    name: "Placeholder",
+    duration: 0,
+    createdAt: 0,
+    type: "image",
+    username: "PierreShow",
+    user_pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/753e553e-3aaa-40bc-9be0-8e63c2cd1d56-profile_image-70x70.png",
+};
 const server = http.createServer(async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -17,7 +25,7 @@ const server = http.createServer(async (req, res) => {
         req.on("end", async () => {
 
             try {
-                console.log("RAW BODY:", body);
+                //console.log("RAW BODY:", body);
                 const data = JSON.parse(body);
                 console.log("Parsed data:", data);
 
@@ -90,7 +98,7 @@ async function addToQueue(data) {
         priority = false
     } = data;
 
-    if (!name || !duration || !type || !username || !user_pfp) {
+    if (!id, !name || !duration || !type || !username || !user_pfp) {
         return;
     }
 
@@ -218,9 +226,9 @@ async function skipCurrent() {
 
 async function getFullQueue() {
     const normal = await redis.lRange(QUEUE_KEY, 0, -1);
-
     return [
-        ...normal.map(JSON.parse)
+        ...normal.map(JSON.parse),
+        ...(!currentItem ? [] : [placeholder])
     ];
 }
 
@@ -238,17 +246,13 @@ async function publishState() {
             type: "image"
         };
     } else if (currentItem) {
-        shownCurrent = currentItem;
-    } else {
+        const elapsed = isPaused ? 0 : Date.now() - startTimestamp;
         shownCurrent = {
-            id: "0",
-            name: "Placeholder",
-            duration: 0,
-            createdAt: 0,
-            type: "image",
-            username: "PierreShow",
-            user_pfp: "https://static-cdn.jtvnw.net/jtv_user_pictures/753e553e-3aaa-40bc-9be0-8e63c2cd1d56-profile_image-70x70.png",
+            ...currentItem,
+            duration: Math.max(0, remainingTime - elapsed)
         };
+    } else {
+        shownCurrent = placeholder;
     }
 
     const payload = JSON.stringify({

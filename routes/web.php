@@ -25,7 +25,8 @@ $router->get('/liste', [PageController::class, 'show', ['Liste', true]]); // uti
 
 
 $router->post('/api/queue/add', [QueueController::class, 'add'], [
-    'middleware' => 'auth'
+    'middleware' => 'auth',
+    'middleware' => 'permission:addToWaitingList'
 ]);
 
 /*

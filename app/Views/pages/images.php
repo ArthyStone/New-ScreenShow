@@ -25,6 +25,7 @@ foreach ($data['medias'] as $media) {
     ];
 }
 ?>
+<div id="feedback-container"></div>
 <div id="overlay" onclick="closeOverlay()"></div>
 <div class="options">
     <div class="search-filters">
@@ -235,6 +236,13 @@ function openOverlay(id) {
             class="overlay-media"
             ${media.type === "image" ? ">" : "></video>"}
         </div>
+        <div class="mediaPriority" onclick="event.stopPropagation()">
+            <p>Priorité:</p>
+            <label class="switch">
+                <input type="checkbox" onclick="togglePriority(this)" ${prioritized ? "checked" : ""}>
+                <span class="slider"></span>
+            </label>
+        </div>
         <div class="actions-container" onclick="event.stopPropagation()">
             <select name="duration" onchange="selectDuration(event)">
                 <option value="10"${time == 10 ? " selected" : ""}>10 secondes</option>
@@ -246,11 +254,11 @@ function openOverlay(id) {
                 <option value="600"${time == 600 ? " selected" : ""}>10 minutes</option>
                 <option value="1800"${time == 1800 ? " selected" : ""}>30 minutes</option>
             </select>
-            <button class="add-btn" onclick="addToQueue(${media.id})">Ajouter</button>
+            <button class="add-btn" onclick="addToQueue('${media.id}')">Ajouter</button>
         </div>
         <div class="ticketCost" onclick="event.stopPropagation()">
             <div id="innerTicketCost">
-                <p>coût: ${time} <i class="fa-solid fa-ticket"></i></p>
+                <p>coût: ${prioritized ? time * 3 : time} <i class="fa-solid fa-ticket"></i></p>
             </div>
         </div>
     `;
@@ -260,24 +268,78 @@ function closeOverlay() {
     overlay.classList.remove('active');
     overlay.innerHTML = '';
 }
+let selectValue = localStorage.getItem('timeSelect') ?? 30;
+let prioritized = false;
+function togglePriority(checkbox) {
+    prioritized = checkbox.checked;
+    document.querySelector('.ticketCost #innerTicketCost p').innerHTML = `coût: ${prioritized ? selectValue * 3 : selectValue} <i class="fa-solid fa-ticket"></i>`;
+}
 function selectDuration(e) {
     localStorage.setItem('timeSelect', e.target.value);
-    
+    selectValue = e.target.value;
+    document.querySelector('.ticketCost #innerTicketCost p').innerHTML = `coût: ${prioritized ? e.target.value * 3 : e.target.value} <i class="fa-solid fa-ticket"></i>`;
 }
+
+const feedbackContainer = document.querySelector('#feedback-container');
+function showFeedback(message, type = 'success') {
+    const duration = type === 'success' ? 2000 : 3000;
+ 
+    const toasts = feedbackContainer.querySelectorAll('.feedback-toast');
+    if (toasts.length >= 10) {
+        toasts[0].remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.classList.add('feedback-toast', type);
+    toast.textContent = message;
+    feedbackContainer.appendChild(toast);
+ 
+    // Déclenche l'animation d'entrée
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => toast.classList.add('show'));
+    });
+ 
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, duration);
+}
+
 function addToQueue(mediaId) {
-    const duration = localStorage.getItem('timeSelect') ?? 30;
+    const duration = selectValue;
     fetch("/api/queue/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ mediaId, duration, "priority": "none"})
+        body: JSON.stringify({ mediaId, duration, "priority": prioritized})
     })
-    // .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw res.status;
+        else return res.json();
+    })
     .then(data => {
-        console.log(data);
+        if(data.success) {
+            document.querySelector('.user-info .user-details .tickets').innerHTML = data.newTicketsCount + '<i class="fa-solid fa-ticket"></i>';
+            showFeedback('Ajouté à la file d\'attente !', 'success');
+        } else {
+            showFeedback("Vous n'avez plus de tickets", 'error');
+        }
     })
-    .catch(err => {
-        console.log(err);
+    .catch(status => {
+        console.log(status);
+        let error = '';
+        switch(status){
+            case 500: 
+                error = "Une erreur est survenue"
+                break;
+            case 422:
+                error = "Vous n'avez pas assez de tickets"
+                break;
+            case 403:
+                error = "Vous n'êtes pas autorisé à faire cela"
+                break
+        }
+        showFeedback(error, 'error');
     });
 }
 </script>

@@ -13,28 +13,17 @@ class MediaModel {
         $this->collection = Database::get()->Uploads;
     }
 
-
-    private array $user = [];
-    public function setUser(array $user): void {
-        $this->user = $user;
+    public function findById(string $_id) {
+        $media = $this->collection->findOne(['_id' => new ObjectId($_id)]);
+        return $media ? $media->getArrayCopy() : null;
     }
-    public function hasPermission(string $permission): bool {
-        if (!isset($this->user['permissions'])) {
-            return false;
-        }
-
-        return in_array($permission, $this->user['permissions']);
-    }
-
-
-
     public function findByTwitchId(string $twitchId): ?array {
-        $user = $this->collection->findOne(['twitchId' => $twitchId]);
-        return $user ? $user->getArrayCopy() : null;
+        $media = $this->collection->findOne(['twitchId' => $twitchId]);
+        return $media ? $media->getArrayCopy() : null;
     }
     public function findByUsername(string $username): ?array {
-        $user = $this->collection->findOne(['username' => $username]);
-        return $user ? $user->getArrayCopy() : null;
+        $media = $this->collection->findOne(['username' => $username]);
+        return $media ? $media->getArrayCopy() : null;
     }
     public function findAll(): array {
         $media = $this->collection->find();
