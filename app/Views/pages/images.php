@@ -254,7 +254,7 @@ function openOverlay(id) {
                 <option value="600"${time == 600 ? " selected" : ""}>10 minutes</option>
                 <option value="1800"${time == 1800 ? " selected" : ""}>30 minutes</option>
             </select>
-            <button class="add-btn" onclick="addToQueue('${media.id}')">Ajouter</button>
+            <button class="add-btn${prioritized ? " prio" : ""}" onclick="addToQueue('${media.id}')">Ajouter</button>
         </div>
         <div class="ticketCost" onclick="event.stopPropagation()">
             <div id="innerTicketCost">
