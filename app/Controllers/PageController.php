@@ -6,7 +6,7 @@ namespace App\Controllers;
 use App\Core\View;
 use App\Core\Session;
 use App\Models\MediaModel;
-// use App\Models\UserModel;
+use App\Models\CouponModel;
 
 class PageController {
     // Affiche une vue publique
@@ -23,11 +23,22 @@ class PageController {
         if($usesWebSocket) {
             $data['queueServerWS'] = $_ENV['QUEUE_SERVER_WEBSOCKET'];
         }
-        if($page === "Images") {
-            $mediaModel = new MediaModel();
-            $data['medias'] = $mediaModel->findAllAggregate();
-            $data['tags'] = json_decode(str_replace('_', ' ', $_ENV['TAGS']));
+        switch($page) {
+            case "Images":
+                $mediaModel = new MediaModel();
+                $data['medias'] = $mediaModel->findAllAggregate();
+                $data['tags'] = json_decode(str_replace('_', ' ', $_ENV['TAGS']));
+                break;
+            case "Coupons":
+                // $couponModel = new CouponModel();
+                // je comptais récupérer les coupons de l'utilisateur.
+                // finalement, on les récupère depuis le front.
+                break;
         }
         View::render($viewPath, $data, $usesLayout);
+    }
+    public function redirect(string $page): void {
+        header("Location: /" . strtolower($page));
+        exit();
     }
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\View;
 use App\Core\Session;
 use App\Models\MediaModel;
 use App\Models\UserModel;

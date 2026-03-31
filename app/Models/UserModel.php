@@ -48,6 +48,27 @@ class UserModel {
         return $user;
     }
 
+    public function incTicketsByTwitchId(string $twitchId, int $tickets): ?int {
+        $filter = ['twitchId' => $twitchId];
+        if ($tickets < 0) {
+            $filter['tickets'] = ['$gte' => -$tickets];
+        }
+
+        $result = $this->collection->findOneAndUpdate(
+            $filter,
+            ['$inc' => ['tickets' => $tickets]],
+            ['returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER]
+        );
+        if (!$result) {
+            if ($tickets < 0) {
+                throw new \RuntimeException("Solde de tickets insuffisant.");
+            }
+            return null; // utilisateur introuvable
+        }
+
+        return $result->getArrayCopy()['tickets'];
+    }
+
     public function consumeTicketsByTwitchId(string $twitchId, int $tickets): ?int {
         $result = $this->collection->findOneAndUpdate(
             ['twitchId' => $twitchId, 'tickets' => ['$gte' => $tickets]],

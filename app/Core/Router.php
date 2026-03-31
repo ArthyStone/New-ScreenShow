@@ -9,16 +9,13 @@ class Router {
     | Enregistrer des routes GET et POST
     |--------------------------------------------------------------------------
     */
-    public function get(string $uri, array $action, array $options = []): void
-    {
+    public function get(string $uri, array $action, array $options = []): void {
         $this->addRoute('GET', $uri, $action, $options);
     }
-    public function post(string $uri, array $action, array $options = []): void
-    {
+    public function post(string $uri, array $action, array $options = []): void {
         $this->addRoute('POST', $uri, $action, $options);
     }
-    private function addRoute(string $method, string $uri, array $action, array $options): void
-    {
+    private function addRoute(string $method, string $uri, array $action, array $options): void {
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,

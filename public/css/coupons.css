@@ -1,0 +1,231 @@
+/* ── Variables light (défaut) ── */
+body {
+    --coupon-bg-primary:     #ffffff;
+    --coupon-bg-secondary:   #f4e8ff;
+    --coupon-bg-success:     #eaf3de;
+    --coupon-bg-warning:     #faeeda;
+    --coupon-bg-danger:      #fcebeb;
+    --coupon-text-primary:   #1a1a18;
+    --coupon-text-secondary: #6b6b67;
+    --coupon-text-success:   #3b6d11;
+    --coupon-text-warning:   #854f0b;
+    --coupon-text-danger:    #a32d2d;
+    --coupon-border:         rgba(0,0,0,0.12);
+    --coupon-border-md:      rgba(153,111,226,0.35);
+    --coupon-focus-ring:     rgba(153,111,226,0.18);
+    --coupon-font-sans:      system-ui, -apple-system, sans-serif;
+    --coupon-font-mono:      'SFMono-Regular', Consolas, monospace;
+
+    --coupon-accent:         var(--primary-color, #996FE2);
+    --coupon-accent-hover:   var(--tertiary-color, #8763C8);
+    --coupon-mono-bg:        #ede4fa;
+    --coupon-mono-text:      var(--quaternary-color, #6B4FA0);
+
+    --delete-button-bg:      #f7c1c1;
+    --delete-button-hover-bg:#dd8f8f;
+}
+
+/* ── Variables dark ── */
+body.dark {
+    --coupon-bg-primary:     #1c1c1a;
+    --coupon-bg-secondary:   #26203a;
+    --coupon-bg-success:     #173404;
+    --coupon-bg-warning:     #412402;
+    --coupon-bg-danger:      #501313;
+    --coupon-text-primary:   #e8e0f5;
+    --coupon-text-secondary: #9b9b96;
+    --coupon-text-success:   #c0dd97;
+    --coupon-text-warning:   #fac775;
+    --coupon-text-danger:    #f7c1c1;
+    --coupon-border:         rgba(255,255,255,0.08);
+    --coupon-border-md:      rgba(122,91,191,0.45);
+    --coupon-focus-ring:     rgba(122,91,191,0.25);
+
+    --coupon-accent:         var(--primary-color, #7a5bbf);
+    --coupon-accent-hover:   var(--tertiary-color, #5c4096);
+    --coupon-mono-bg:        #2d1f4a;
+    --coupon-mono-text:      #ab86ed;
+
+    --delete-button-bg:      #501313;
+    --delete-button-hover-bg:#7a1c1c;
+}
+
+/* ── Layout ── */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100%;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+@media (min-width: 800px)  { .container { max-width: 600px;  padding: 1.25rem 1.5rem; } }
+@media (min-width: 1200px) { .container { max-width: 1200px; padding: 1.5rem 2rem; } }
+
+.section { margin-bottom: clamp(2rem, 2vw, 2.5rem); }
+
+.section-title {
+    font-size: clamp(13px, 0.8vw, 15px);
+    font-weight: 500;
+    color: var(--coupon-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: clamp(12px, 0.9vw, 15px);
+}
+
+/* ── Grid ── */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(16px, 1.2vw, 22px);
+}
+
+@media (min-width: 600px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+/* ── Cards ── */
+.card {
+    background: var(--coupon-bg-primary);
+    border: 0.5px solid var(--coupon-border-md);
+    border-radius: clamp(12px, 0.9vw, 18px);
+    padding: clamp(1.25rem, 1.8vw, 2rem);
+}
+
+.card-title {
+    font-size: clamp(15px, 1.1vw, 20px);
+    font-weight: 500;
+    color: var(--coupon-text-primary);
+    margin-bottom: clamp(14px, 1vw, 17px);
+}
+
+.card-desc {
+    font-size: clamp(13px, 0.85vw, 16px);
+    color: var(--coupon-text-secondary);
+    margin-bottom: clamp(16px, 1.1vw, 19px);
+    line-height: 1.5;
+}
+
+/* ── Formulaire ── */
+.form-group { margin-bottom: clamp(12px, 0.9vw, 15px); }
+
+.form-group label {
+    display: block;
+    font-size: clamp(13px, 0.85vw, 15px);
+    color: var(--coupon-text-secondary);
+    margin-bottom: clamp(5px, 0.4vw, 7px);
+}
+
+.form-group label span { font-weight: 400; }
+
+.form-group input {
+    width: 100%;
+    padding: clamp(7px, 0.55vw, 9px) clamp(10px, 0.75vw, 14px);
+    font-size: clamp(14px, 0.9vw, 16px);
+    font-family: var(--coupon-font-sans);
+    color: var(--coupon-text-primary);
+    background: var(--coupon-bg-primary);
+    border: 0.5px solid var(--coupon-border-md);
+    border-radius: clamp(8px, 0.5vw, 10px);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input:focus {
+    border-color: var(--coupon-accent);
+    box-shadow: 0 0 0 3px var(--coupon-focus-ring);
+}
+
+.form-group input::placeholder {
+    color: var(--coupon-text-secondary);
+    opacity: 0.6;
+}
+
+/* ── Boutons ── */
+.btn {
+    width: 100%;
+    padding: clamp(8px, 0.6vw, 10px) clamp(16px, 1.2vw, 22px);
+    font-size: clamp(14px, 0.9vw, 16px);
+    font-weight: 500;
+    font-family: var(--coupon-font-sans);
+    cursor: pointer;
+    border-radius: clamp(8px, 0.5vw, 10px);
+    border: 0.5px solid var(--coupon-border-md);
+    background: var(--coupon-bg-primary);
+    color: var(--coupon-text-primary);
+    margin-top: clamp(4px, 0.3vw, 5px);
+    transition: background 0.15s, opacity 0.15s;
+}
+
+.btn:hover { background: var(--coupon-bg-secondary); }
+
+.btn-primary {
+    background: var(--coupon-accent);
+    color: #fff;
+    border-color: transparent;
+}
+
+.btn-primary:hover    { background: var(--coupon-accent-hover); opacity: 1; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-link {
+    background-color: var(--delete-button-bg);
+    width: auto;
+    border: none;
+    order: 4;
+}
+.btn-link:hover { background-color: var(--delete-button-hover-bg); }
+
+/* ── Feedback ── */
+.feedback {
+    font-size: clamp(13px, 0.85vw, 15px);
+    padding: clamp(8px, 0.6vw, 10px) clamp(12px, 0.9vw, 16px);
+    border-radius: clamp(8px, 0.5vw, 10px);
+    margin-top: clamp(10px, 0.7vw, 12px);
+    display: none;
+}
+
+.feedback.ok { display: block; background: var(--coupon-bg-success); color: var(--coupon-text-success); }
+.feedback.ko { display: block; background: var(--coupon-bg-danger);  color: var(--coupon-text-danger);  }
+
+/* ── Liste de coupons ── */
+.section:last-child .card { padding: 10px 25px; }
+.coupon-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 0.9vw, 15px);
+    padding: clamp(10px, 0.7vw, 12px) 0;
+    border-bottom: 0.5px solid var(--coupon-border);
+}
+
+.coupon-row:last-child { border-bottom: none; }
+
+@media (max-width: 600px) {
+    .coupon-row  { flex-wrap: wrap; gap: 6px; }
+    .coupon-meta { width: 100%; order: 3; }
+}
+
+.code-badge {
+    font-family: var(--coupon-font-mono);
+    font-size: clamp(13px, 0.85vw, 15px);
+    font-weight: 500;
+    background: var(--coupon-mono-bg);
+    padding: clamp(3px, 0.2vw, 4px) clamp(8px, 0.55vw, 11px);
+    border-radius: clamp(8px, 0.5vw, 10px);
+    color: var(--coupon-mono-text);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+}
+
+.coupon-meta   { flex: 1; min-width: 0; }
+.coupon-meta p { font-size: clamp(13px, 0.85vw, 15px); color: var(--coupon-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.value-chip { font-size: clamp(13px, 0.85vw, 15px); font-weight: 500; color: var(--coupon-text-primary); flex-shrink: 0; }
+
+.badge         { display: inline-block; font-size: clamp(11px, 0.75vw, 13px); font-weight: 500; padding: clamp(2px, 0.2vw, 3px) clamp(8px, 0.55vw, 11px); border-radius: 99px; flex-shrink: 0; }
+.badge-success { background: var(--coupon-bg-success); color: var(--coupon-text-success); }
+.badge-warn    { background: var(--coupon-bg-warning);  color: var(--coupon-text-warning); }
+.badge-danger  { background: var(--coupon-bg-danger);   color: var(--coupon-text-danger);  }
+
+.empty { font-size: clamp(14px, 0.9vw, 16px); color: var(--coupon-text-secondary); padding: clamp(1rem, 1vw, 1.25rem) 0; text-align: center; }

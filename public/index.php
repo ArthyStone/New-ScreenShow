@@ -19,22 +19,22 @@ Session::start();
 $router = require __DIR__ . '/../routes/web.php';
 $router->dispatch();
 
+/*
+* composer install
+* composer require vlucas/phpdotenv
+* composer require mongodb/mongodb
+
+* .env à la racine du projet :
+MONGO_DSN= votre uri de connexion à MongoDB
+MONGO_DB= votre nom de base de données
+TWITCH_CLIENT_ID= votre client id de l'application Twitch
+TWITCH_CLIENT_SECRET= votre client secret de l'application Twitch
+TWITCH_REDIRECT_URI=http://localhost:8000/auth/twitch/callback
+TAGS=["tag1","tag2","tag3","tag4","..."]
+QUEUE_SERVER_POST=http://localhost:8080
+QUEUE_SERVER_WEBSOCKET=ws://localhost:8080
 
 
-
-
-// Voici toutes les commandes à exécuter:
-// composer require vlucas/phpdotenv
-// composer require mongodb/mongodb
-
-
-
-// 1. Installer les dépendances avec Composer :
-//    composer install
-// 2. Créer un fichier .env à la racine du projet avec les variables suivantes :
-//    MONGO_DSN=mongodb+srv://<username>:<password>@cluster0.893moaf.mongodb.net/
-//    MONGO_DB=Screenshow
-// 3. Lancer le serveur de développement intégré de PHP :
-//    php -S localhost:8000 -t public
-// 4. Accéder à l'application dans votre navigateur :
-//    http://localhost:8000
+* pour lancer en local : php -S localhost:8000 -t public
+* pour lancer en prod on utilisera apache sur le vps.
+*/
