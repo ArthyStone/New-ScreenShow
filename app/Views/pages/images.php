@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 use MongoDB\BSON\ObjectId;
-//var_dump($data['medias']);
 $javascriptArray = [];
-foreach ($data['medias'] as $media) {
+foreach ($medias as $media) {
     if($media['state'] != 'APPROVED') continue;
     $id = $media['_id'] instanceof ObjectId ? $media['_id']->__toString() : (string)$media['_id'];
     $type = $media['type'] ?? 'Inconnu';
@@ -35,8 +34,7 @@ foreach ($data['medias'] as $media) {
     </div>
     <div class="tagArray">
 <?php
-//var_dump($data['tags']);
-foreach($data['tags'] as $tag){
+foreach($tags as $tag){
     $altTag = str_replace(' ', '_', $tag);
     echo "<button class='tag tagToggle' id='$altTag' onclick='toggleTag(\"$altTag\")'>$tag</button>";
 }

@@ -19,10 +19,10 @@
         </span>
         <div class="user-info">
             <div class="user-details">
-                <span class="username"><?= $data['user_name'] ?? 'Utilisateur' ?></span>
-                <span class="tickets"><?= $data['user_tickets'] ?? 0 ?><i class="fa-solid fa-ticket"></i></span>
+                <span class="username"><?= $user_name ?? 'Utilisateur' ?></span>
+                <span class="tickets"><?= $user_tickets ?? 0 ?><i class="fa-solid fa-ticket"></i></span>
             </div>
-            <img class="avatar" src="<?= $data['user_pfp'] ?? 'https://i.pinimg.com/170x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg' ?>" alt="Avatar">
+            <img class="avatar" src="<?= $user_pfp ?? 'https://i.pinimg.com/170x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg' ?>" alt="Avatar">
         </div>
     </header>
 
@@ -59,7 +59,7 @@
                 <i class="fa-solid fa-moon"></i>
                 <span class="label">Dark Mode</span>
             </button>
-            <?php if (isset($data['user_name'])): ?>
+            <?php if (isset($user_name)): ?>
                 <a href="/logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span class="label">Se déconnecter</span>

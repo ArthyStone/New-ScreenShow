@@ -131,7 +131,7 @@
     let connexionAttempts = 0;
     function connectToWebSocket() {
       connexionAttempts++;
-      const ws = new WebSocket("<?=$data['queueServerWS']?>");
+      const ws = new WebSocket("<?=$queueServerWS?>");
       ws.onopen = () => {
         console.log("Connecté au serveur WebSocket");
         connexionAttempts = 0;
