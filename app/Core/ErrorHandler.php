@@ -14,9 +14,9 @@ class ErrorHandler {
         echo "Erreur interne.";
         echo "<pre>";
         echo $e;
-        exit;
         // En production : log fichier
         error_log($e->getMessage());
+        exit;
     }
 
     public static function handleError(int $severity, string $message, string $file, int $line): void {

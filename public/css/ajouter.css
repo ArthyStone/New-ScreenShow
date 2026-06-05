@@ -1,0 +1,471 @@
+/* ── Variables light ── */
+body {
+    --dropZone-background: rgba(153, 111, 226, 0.18);
+    --dropZone-border-color: rgb(153, 111, 226);
+    --dropZone-dragover-background: rgba(153, 111, 226, 0.32);
+
+    --card-background: #fff;
+    --card-border: rgba(153, 111, 226, 0.3);
+
+    --input-border: rgba(153, 111, 226, 0.4);
+    --input-border-focus: rgb(153, 111, 226);
+    --input-background: #fff;
+    --input-color: #1a1a1a;
+
+    --tag-background: rgba(153, 111, 226, 0.15);
+    --tag-color: rgb(90, 50, 160);
+    --tag-btn-color: rgb(130, 80, 210);
+
+    --tag-selected-background: rgb(153, 111, 226);
+    --tag-selected-color: #fff;
+
+    --upload-btn-background: rgb(153, 111, 226);
+    --upload-btn-hover: rgb(133, 91, 206);
+    --upload-btn-color: #fff;
+
+    --text-primary: #1a1a1a;
+    --text-secondary: #666;
+    --text-muted: #999;
+
+    --error-background: #fff0f0;
+    --error-color: #c0392b;
+}
+
+/* ── Variables dark ── */
+body.dark {
+    --dropZone-background: rgba(153, 111, 226, 0.12);
+    --dropZone-border-color: rgb(153, 111, 226);
+    --dropZone-dragover-background: rgba(153, 111, 226, 0.28);
+
+    --card-background: #1e1b2e;
+    --card-border: rgba(153, 111, 226, 0.3);
+
+    --input-border: rgba(153, 111, 226, 0.35);
+    --input-border-focus: rgb(153, 111, 226);
+    --input-background: #16132a;
+    --input-color: #f0ecff;
+
+    --tag-background: rgba(153, 111, 226, 0.25);
+    --tag-color: #d4b8ff;
+    --tag-btn-color: #b48fff;
+
+    --tag-selected-background: rgb(153, 111, 226);
+    --tag-selected-color: #fff;
+
+    --upload-btn-background: rgb(153, 111, 226);
+    --upload-btn-hover: rgb(173, 131, 246);
+    --upload-btn-color: #fff;
+
+    --text-primary: #f0ecff;
+    --text-secondary: #a89bc2;
+    --text-muted: #6e617f;
+
+    --error-background: #2d1a1a;
+    --error-color: #f08080;
+}
+
+/* ── Layout ── */
+main {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── Palette de tags (desktop uniquement) ── */
+#tagPalette {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--dropZone-background);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    width: 100%;
+    margin-bottom: 4px;
+    box-sizing: border-box;
+}
+
+.palette-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin-right: 4px;
+}
+
+.palette-tag {
+    display: inline-flex;
+    align-items: center;
+    background: var(--tag-background);
+    color: var(--tag-color);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: grab;
+    border: 1px dashed var(--input-border);
+    user-select: none;
+    transition: opacity .15s, transform .15s, box-shadow .15s;
+}
+.palette-tag:hover {
+    opacity: .85;
+    box-shadow: 0 2px 8px rgba(153, 111, 226, 0.25);
+}
+.palette-tag.dragging {
+    opacity: .4;
+    cursor: grabbing;
+    transform: scale(.95);
+}
+
+/* ── Carte en état de réception ── */
+.file-cell.tag-drop-target {
+    outline: 2px solid var(--dropZone-border-color);
+    background: var(--dropZone-dragover-background);
+}
+.file-cell.tag-drop-target .file-thumb-full {
+    opacity: .7;
+}
+
+/* ── Boutons de tags inline (cachés sur desktop) ── */
+.mobile-tag-buttons { display: none; }
+
+/* ── Grille ── */
+#grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+/* ── Drop zone ── */
+#dropZone {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    aspect-ratio: unset;
+    min-height: 220px;
+    border-radius: 40px;
+    border: 4px dashed var(--dropZone-border-color);
+    background: var(--dropZone-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: background .2s, border-color .2s, min-height .3s;
+}
+
+#dropZone.compact {
+    grid-column: unset;
+    aspect-ratio: 1;
+    min-height: unset;
+    border-radius: 20px;
+    border-width: 3px;
+}
+
+#dropZone.compact .ephemeralDropZoneText { display: none; }
+#dropZone.dragover { background: var(--dropZone-dragover-background); }
+
+#dropZone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.drop-icon { font-size: 32px; color: var(--dropZone-border-color); margin-bottom: 8px; }
+.drop-label { font-size: 13px; font-weight: 500; color: var(--tag-color); text-align: center; padding: 0 8px; }
+.drop-sub { font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 4px; padding: 0 8px; }
+
+/* ── Carte fichier ── */
+.file-cell {
+    aspect-ratio: 1;
+    border-radius: 20px;
+    border: 2px solid var(--card-border);
+    background: var(--card-background);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: popIn .3s cubic-bezier(.34, 1.56, .64, 1);
+    transition: outline .1s, background .15s;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(.85); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Miniature ── */
+.file-thumb-full {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    background: var(--dropZone-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .15s;
+}
+.file-thumb-full img,
+.file-thumb-full video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.file-thumb-full .file-icon {
+    font-size: 36px;
+    color: var(--dropZone-border-color);
+}
+
+/* ── Footer de la carte ── */
+.file-footer {
+    padding: 7px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: var(--card-background);
+}
+
+/* ── Input nom ── */
+.file-name-input {
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 3px 6px;
+    background: var(--input-background);
+    color: var(--input-color);
+    width: 100%;
+    transition: border-color .15s;
+}
+.file-name-input:focus {
+    outline: none;
+    border-color: var(--input-border-focus);
+}
+
+.file-ext  { font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
+.file-size { font-size: 10px; color: var(--text-muted); }
+
+/* ── Tags appliqués (desktop) ── */
+.tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+}
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: var(--tag-background);
+    color: var(--tag-color);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 20px;
+}
+.tag button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--tag-btn-color);
+    font-size: 11px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Bouton suppression flottant ── */
+.remove-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(153, 111, 226, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #c0392b;
+    transition: background .15s;
+    z-index: 2;
+}
+.remove-btn:hover { background: #fff0f0; }
+
+/* ── Bouton d'envoi ── */
+.upload-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    animation: popIn .25s ease;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--upload-btn-background);
+    color: var(--upload-btn-color);
+    border: none;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .15s, opacity .2s;
+    box-shadow: 0 4px 14px rgba(153, 111, 226, 0.35);
+}
+.upload-btn:hover:not(:disabled) {
+    background: var(--upload-btn-hover);
+    transform: translateY(-1px);
+}
+.upload-btn:active:not(:disabled) { transform: translateY(0); }
+.upload-btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+}
+
+/* ── Barre de progression ── */
+.upload-progress {
+    width: 100%;
+    max-width: 400px;
+    height: 4px;
+    background: var(--card-border);
+    border-radius: 99px;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity .2s;
+}
+.upload-progress.visible { opacity: 1; }
+
+.upload-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--upload-btn-background);
+    border-radius: 99px;
+    transition: width .3s ease;
+}
+
+/* ── Erreurs & compteur ── */
+.error-msg {
+    background: var(--error-background);
+    color: var(--error-color);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+#counter {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: right;
+    width: 100%;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE  (≤ 600px)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+
+    #tagPalette { display: none; }
+    .tags-wrap  { display: none; }
+
+    #grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .file-cell {
+        aspect-ratio: unset;
+        border-radius: 16px;
+    }
+
+    .file-thumb-full {
+        height: 200px;
+        flex: none;
+    }
+
+    .file-footer {
+        padding: 10px 12px;
+        gap: 8px;
+    }
+
+    .file-name-input {
+        font-size: 14px;
+        padding: 6px 10px;
+        border-radius: 10px;
+    }
+    .file-ext  { font-size: 13px; }
+    .file-size { font-size: 12px; }
+
+    .mobile-tag-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .mobile-tag-btn {
+        background: var(--tag-background);
+        color: var(--tag-color);
+        border: 1px dashed var(--input-border);
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 5px 12px;
+        cursor: pointer;
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+        transition: background .15s, color .15s, border-color .15s;
+    }
+    .mobile-tag-btn.selected {
+        background: var(--tag-selected-background);
+        color: var(--tag-selected-color);
+        border-color: transparent;
+        border-style: solid;
+    }
+    .mobile-tag-btn:active { opacity: .75; }
+
+    .remove-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        top: 10px;
+        right: 10px;
+    }
+
+    #dropZone {
+        border-radius: 24px;
+        min-height: 160px;
+    }
+    #dropZone.compact {
+        aspect-ratio: unset;
+        height: 100px;
+        min-height: unset;
+    }
+
+    #counter { font-size: 13px; }
+
+    .upload-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        font-size: 15px;
+        border-radius: 12px;
+    }
+}

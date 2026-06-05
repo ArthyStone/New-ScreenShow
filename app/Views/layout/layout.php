@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <link rel="stylesheet" type="text/css" href="/css/<?= lcfirst($title) ?>.css">
     <link rel="icon" href="/resources/icon.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -20,7 +21,7 @@
         <div class="user-info">
             <div class="user-details">
                 <span class="username"><?= $user_name ?? 'Utilisateur' ?></span>
-                <span class="tickets"><?= $user_tickets ?? 0 ?><i class="fa-solid fa-ticket"></i></span>
+                <span class="tickets"><?= number_format($user_tickets ?? 0, 0, ',', ' ') ?><i class="fa-solid fa-ticket"></i></span>
             </div>
             <img class="avatar" src="<?= $user_pfp ?? 'https://i.pinimg.com/170x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg' ?>" alt="Avatar">
         </div>
@@ -46,13 +47,19 @@
                 <span class="label">Liste</span>
             </a>
             <a href="/ajouter">
-                <i class="icon fa-solid fa-square-plus<?= $title === "Ajouter" ? " fa-fade" : ""?>"></i>
+                <i class="fa-solid fa-upload<?= $title === "Ajouter" ? " fa-fade" : ""?>"></i>
                 <span class="label">Ajouter</span>
             </a>
             <a href="/redeem">
                 <i class="icon fa-solid fa-key<?= $title === "Redeem" ? " fa-fade" : ""?>"></i>
-                <span class="label">Redeem</span>
+                <span class="label">Coupons</span>
             </a>
+            <?php if (isset($permissions) && (in_array("manageUploads", $permissions, true) || in_array("manageUsers", $permissions, true) || in_array("admin", $permissions, true))): ?>
+            <a href="/dashboard">
+                <i class="fa-solid fa-warehouse<?= $title === "Dashboard" ? " fa-fade" : ""?>"></i>
+                <span class="label">Dashboard</span>
+            </a>
+            <?php endif; ?>
         </div>
         <div class="buttons">
             <button id="theme-toggle">
@@ -73,11 +80,10 @@
         </div>
     </aside>
 
-    <!-- CONTENU PRINCIPAL -->
     <main>
         <?= $content ?>
     </main>
-
+    <script src="scripts/<?= lcfirst($title) ?>.js"></script>
     <script>
         const toggleBtn = document.getElementById('toggle-sidebar');
         const sidebar = document.getElementById('sidebar');

@@ -49,7 +49,6 @@ class CouponModel {
             if ($err->getCode() === 11000 && $code === null) {
                 return $this->create($twitchId, $value, $uses, null, $daysValid);
             }
-            // Erreur 11000 avec code manuel = duplicata
             if ($err->getCode() === 11000) {
                 return ['error' => 'duplicateCode'];
             }
@@ -61,20 +60,20 @@ class CouponModel {
      * Retourne ['coupon' => array] en cas de succès,
      * ou ['error' => string] en cas d'échec.
      */
-    public function consume(string $twitchId, string $code): array {
+    public function consume(string $twitchId, string $username, string $code): array {
         $now = new UTCDateTime(time() * 1000);
 
         $result = $this->collection->findOneAndUpdate(
             [
-                'code'          => $code,
-                'createdBy'     => ['$ne' => $twitchId],
-                'usedBy'        => ['$ne' => $twitchId],
-                'remainingUses' => ['$gt' => 0],
-                'expiresAt'     => ['$gt' => $now],
+                'code'              => $code,
+                'createdBy'         => ['$ne' => $twitchId],
+                'usedBy.twitchId'   => ['$ne' => $twitchId],
+                'remainingUses'     => ['$gt' => 0],
+                'expiresAt'         => ['$gt' => $now],
             ],
             [
                 '$inc'  => ['remainingUses' => -1],
-                '$push' => ['usedBy' => $twitchId],
+                '$push' => ['usedBy' => ['twitchId' => $twitchId, 'username' => $username]],
             ],
             ['returnDocument' => FindOneAndUpdate::RETURN_DOCUMENT_AFTER]
         );
@@ -96,7 +95,8 @@ class CouponModel {
             return ['error' => 'ownCoupon'];
         }
 
-        if (in_array($twitchId, (array) $coupon['usedBy'], true)) {
+        $usedByIds = array_column((array) $coupon['usedBy'], 'twitchId');
+        if (in_array($twitchId, $usedByIds, true)) {
             return ['error' => 'alreadyUsed'];
         }
 

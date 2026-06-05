@@ -21,13 +21,26 @@ class UserModel {
         $user = $this->collection->findOne(['username' => $username]);
         return $user ? $user->getArrayCopy() : null;
     }
-    public function hasPermissionByTwitchId(string $twitchId, string $permission): bool {
+    public function getPermissionsByTwitchId(string $twitchId): array {
         $user = $this->findByTwitchId($twitchId);
-        $perms = $user['perms']->getArrayCopy() ?? null; // de base, on reçoit un BSON array, on le convertit en array PHP
-        if ($user && isset($user['perms']) && in_array($permission, $perms)) {
-            return true;
+        if (!$user || !isset($user['perms'])) {
+            return [];
         }
-        return false;
+
+        if (is_array($user['perms'])) {
+            return $user['perms'];
+        }
+
+        if (method_exists($user['perms'], 'getArrayCopy')) {
+            return $user['perms']->getArrayCopy();
+        }
+
+        return [];
+    }
+
+    public function hasPermissionByTwitchId(string $twitchId, string $permission): bool {
+        $permissions = $this->getPermissionsByTwitchId($twitchId);
+        return in_array($permission, $permissions, true);
     }
 
     public function createFromTwitch(array $data): array {

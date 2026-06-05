@@ -20,6 +20,7 @@ class QueueController {
         $userModel = new UserModel();
         $twitchId = Session::get('user_id');
         $user = $userModel->findByTwitchId($twitchId);
+        $duration = $duration < 0 ? 0 : ($duration > 300 ? 300 : $duration); // clamp duration between 0 and 300 seconds
 
         // paramètres pour le file_get_contents (requête POST au serveur de la queue)
         $data = [

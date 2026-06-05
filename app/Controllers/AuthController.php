@@ -81,7 +81,12 @@ class AuthController {
         Session::set('user_name', (string) $user['username'] ?? 'Utilisateur');
         Session::set('user_pfp', (string) $user['twitchPFP'] ?? 'https://i.pinimg.com/170x/1d/ec/e2/1dece2c8357bdd7cee3b15036344faf5.jpg');
         Session::set('user_tickets', (string) $user['tickets'] ?? 0);
-        Session::set('permissions', $user['perms'] ?? []);
+
+        $permissions = $user['perms'] ?? [];
+        if (!is_array($permissions) && method_exists($permissions, 'getArrayCopy')) {
+            $permissions = $permissions->getArrayCopy();
+        }
+        Session::set('permissions', is_array($permissions) ? $permissions : []);
 
         header('Location: ' . $redirect);
         exit;

@@ -5,6 +5,7 @@ use App\Core\Router;
 use App\Controllers\AuthController;
 use App\Controllers\PageController;
 use App\Controllers\QueueController;
+use App\Controllers\MediaController;
 use App\Controllers\CouponController;
 // use App\Controllers\UploadController;
 // use App\Controllers\AdminController;
@@ -25,19 +26,39 @@ $router->get('/images', [PageController::class, 'show', ['Images']], [
 $router->get('/display', [PageController::class, 'show', ['Display', true, false]]); // utilise websocket mais pas layout
 $router->get('/liste', [PageController::class, 'show', ['Liste', true]]); // utilise websocket
 
+$router->get('/ajouter', [PageController::class, 'show', ['Ajouter']], [
+    'middleware' => 'auth'
+]);
 $router->get('/redeem', [PageController::class, 'show', ['Coupons']], [
     'middleware' => 'auth'
 ]);
+$router->get('/dashboard', [PageController::class, 'show', ['Dashboard']], [
+    'middleware' => 'auth',
+    'middleware' => 'permission:manageUploads,manageUsers'
+]);
 
 
+/*
+|--------------------------------------------------------------------------
+| API
+|--------------------------------------------------------------------------
+*/
 
+// Queue
 $router->post('/api/queue/add', [QueueController::class, 'add'], [
     'middleware' => 'auth',
     'middleware' => 'permission:addToWaitingList'
 ]);
 
 
+// Medias
+$router->post('/api/medias/add', [MediaController::class, 'add'], [
+    'middleware' => 'auth',
+    'middleware' => 'permission:uploadImages'
+]);
 
+
+// Coupons
 $router->get('/api/coupons/list', [CouponController::class, 'list'], [
     'middleware' => 'auth',
 ]);

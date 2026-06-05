@@ -1,4 +1,4 @@
-* { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0.3s ease, background-color 0s, color 0s; outline: none; }
+* { margin: 0; padding: 0; box-sizing: border-box; border: none; transition: all 0, background-color 0s, color 0s; outline: none; }
 :root {
     --caption-background: #00000088;
     --caption-text-color: #f8f8f8;
@@ -305,7 +305,6 @@ body.dark {
     border-radius: 10px;
     background-color: var(--search-filters-button-background-color);
     color: var(--search-filters-button-color);
-    transition: background-color 0.3s ease;
 }
 .search-filters button:hover {
     background-color: var(--search-filters-button-hover-background-color);

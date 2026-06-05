@@ -16,7 +16,8 @@ class PageController {
         if($usesLayout) {
             $data['user_name'] = Session::get('user_name');
             $data['user_pfp'] = Session::get('user_pfp');
-            $data['user_tickets'] = Session::get('user_tickets'); // on changera la valeur en session lors d'un achat
+            $data['user_tickets'] = Session::get('user_tickets');
+            $data['permissions'] = Session::get('permissions'); // on changera la valeur en session lors d'un achat
             // $userModel = new UserModel();
             // $data['user_tickets'] = $userModel->findByTwitchId(Session::get('user_id'))['tickets'];
         }
@@ -28,11 +29,14 @@ class PageController {
                 $mediaModel = new MediaModel();
                 $data['medias'] = $mediaModel->findAllAggregate();
                 $data['tags'] = json_decode(str_replace('_', ' ', $_ENV['TAGS']));
+                $data['mediaFolder'] = $_ENV['MEDIA_FOLDER'];
                 break;
-            case "Coupons":
-                // $couponModel = new CouponModel();
-                // je comptais récupérer les coupons de l'utilisateur.
-                // finalement, on les récupère depuis le front.
+            case "Ajouter":
+                $data['tags'] = json_decode(str_replace('_', ' ', $_ENV['TAGS']));
+                break;
+            case "Display":
+                $data['queueServerWS'] = $_ENV['QUEUE_SERVER_WEBSOCKET'];
+                $data['mediaFolder'] = $_ENV['MEDIA_FOLDER'];
                 break;
         }
         View::render($viewPath, $data, $usesLayout);

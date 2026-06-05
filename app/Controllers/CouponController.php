@@ -125,6 +125,7 @@ class CouponController {
         header('Content-Type: application/json');
         $input    = json_decode(file_get_contents('php://input'), true);
         $twitchId = Session::get('user_id');
+        $username = Session::get('user_name');
         $code     = $input['code'] ?? null;
 
         if (!$code) {
@@ -136,7 +137,7 @@ class CouponController {
         $userModel   = new UserModel();
         $couponModel = new CouponModel();
 
-        $result = $couponModel->consume($twitchId, $code);
+        $result = $couponModel->consume($twitchId, $username, $code);
 
         if (isset($result['error'])) {
             http_response_code(400);
@@ -152,12 +153,25 @@ class CouponController {
         echo json_encode(["success" => true, 'newTicketsCount' => $newTicketsCount]);
     }
 
-    public function list(): void {
+    public static function list(): void {
         header('Content-Type: application/json');
         $twitchId = Session::get('user_id');
-
         $couponModel = new CouponModel();
+        // $userModel   = new UserModel();
         $coupons     = $couponModel->findAllByTwitchId($twitchId);
+
+        // Enrichir chaque coupon en transformant usedBy
+        // foreach ($coupons as &$coupon) {
+        //     if (isset($coupon['usedBy']) && is_array($coupon['usedBy'])) {
+        //         $coupon['usedBy'] = array_map(function (string $usedByTwitchId) use ($userModel) {
+        //             $user = $userModel->findByTwitchId($usedByTwitchId);
+        //             return [
+        //                 'twitchId' => $usedByTwitchId,
+        //                 'username' => $user['username'] ?? null,
+        //             ];
+        //         }, $coupon['usedBy']);
+        //     }
+        // }
 
         http_response_code(200);
         echo json_encode(["success" => true, 'coupons' => $coupons]);
